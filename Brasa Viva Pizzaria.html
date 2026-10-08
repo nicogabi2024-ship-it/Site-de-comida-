@@ -1,0 +1,491 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Brasa Viva Pizzaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: noite de forno a lenha. Visual escuro com brasa, faixa de aviso, hero com pizza, passos, montador de pizza (tamanho, 1 ou 2 sabores, borda) que enche o carrinho, pedido para WhatsApp, combos, entrega por bairro, FAQ, horário e contato. */
+:root {
+  --bg: #f5efe6;
+  --surface: #ffffff;
+  --fg: #231a15;
+  --muted: #6b5d52;
+  --line: #e4d9cb;
+  --ember: #d9480f;
+  --ember-fg: #ffffff;
+  --gold: #f2b134;
+  --gold-fg: #231a15;
+  --wa: #1f9d63;
+  --wa-fg: #ffffff;
+  --font-display: "Anton", "Impact", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14100d; --surface: #201915; --fg: #f6ede3; --muted: #b9a999; --line: #3a2e26;
+    --ember: #ff7a3d; --ember-fg: #14100d; --gold: #f7be4a; --gold-fg: #14100d;
+    --wa: #4cc98c; --wa-fg: #14100d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14100d; --surface: #201915; --fg: #f6ede3; --muted: #b9a999; --line: #3a2e26;
+  --ember: #ff7a3d; --ember-fg: #14100d; --gold: #f7be4a; --gold-fg: #14100d;
+  --wa: #4cc98c; --wa-fg: #14100d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.55; padding-inline: 16px; }
+body.has-cart { padding-bottom: 84px; }
+.wrap { max-width: 1040px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 0.01em; text-transform: uppercase; line-height: 1.05; text-wrap: balance; margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ember); outline-offset: 3px; }
+
+.notice { margin-inline: -16px; padding: 8px 16px; background: var(--fg); color: var(--bg); font-size: 13px; text-align: center; }
+
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-size: 26px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: 0.02em; }
+.flame { width: 22px; height: 30px; flex: none; }
+nav.links { display: flex; gap: 20px; font-weight: 700; font-size: 15px; }
+nav.links a { text-decoration: none; color: var(--muted); }
+nav.links a:hover { color: var(--fg); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 10px; font-weight: 700; text-decoration: none; border: 2px solid transparent; font-size: 16px; }
+.btn-ember { background: var(--ember); color: var(--ember-fg); }
+.btn-wa { background: var(--wa); color: var(--wa-fg); }
+.btn-ghost { border-color: var(--fg); color: var(--fg); background: transparent; }
+.btn:hover { filter: brightness(1.08); }
+.btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.btn-full { width: 100%; }
+
+.hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: center; padding-block: 28px 44px; }
+.hero > * { min-width: 0; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin: 0 0 12px; }
+.hero h1 { font-size: clamp(42px, 9vw, 88px); }
+.hero h1 em { font-style: normal; color: var(--ember); }
+.hero p.lead { color: var(--muted); font-size: 18px; max-width: 44ch; margin: 16px 0 24px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 24px 0 0; padding: 0; list-style: none; font-weight: 700; }
+.facts li span { display: block; font-family: var(--font-display); font-size: 26px; color: var(--ember); line-height: 1; font-weight: 400; }
+.facts li { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.art { display: flex; justify-content: center; }
+.art svg { width: 100%; max-width: 380px; height: auto; }
+
+section { padding-block: 34px; }
+.sec-head { display: flex; align-items: end; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+.sec-head h2 { font-size: clamp(30px, 5vw, 46px); }
+.sec-head p { margin: 0; color: var(--muted); max-width: 42ch; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; min-width: 0; }
+.card h3 { font-size: 24px; margin-bottom: 14px; }
+.fine { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+.builder { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20px; }
+.builder > * { min-width: 0; }
+.group { margin-bottom: 20px; }
+.group > b { display: block; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { border: 2px solid var(--line); background: var(--bg); border-radius: 12px; padding: 9px 14px; font-weight: 700; text-align: left; }
+.opt small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+.opt[aria-pressed="true"] { border-color: var(--ember); background: var(--ember); color: var(--ember-fg); }
+.opt[aria-pressed="true"] small { color: inherit; opacity: 0.9; }
+.field { display: grid; gap: 4px; margin-bottom: 12px; }
+.field label { font-size: 13px; font-weight: 700; color: var(--muted); }
+.field input, .field select, .field textarea { font: inherit; color: var(--fg); background: var(--bg); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%; }
+.field textarea { min-height: 70px; resize: vertical; }
+
+.preview { display: flex; align-items: center; gap: 16px; background: var(--bg); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+.preview svg { width: 96px; height: 96px; flex: none; }
+.preview .pt { font-family: var(--font-display); font-size: 28px; text-transform: uppercase; line-height: 1; }
+.preview .pd { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+.line { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.line .nm { flex: 1; min-width: 0; font-weight: 700; }
+.line .nm small { display: block; color: var(--muted); font-weight: 400; }
+.qty { display: flex; align-items: center; gap: 8px; }
+.qty button { width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--bg); font-weight: 700; }
+.qty span { min-width: 18px; text-align: center; font-weight: 700; }
+.amt { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 76px; text-align: right; }
+.totals { margin-top: 12px; display: grid; gap: 4px; font-variant-numeric: tabular-nums; }
+.totals div { display: flex; justify-content: space-between; }
+.totals .grand { font-family: var(--font-display); font-size: 26px; text-transform: uppercase; margin-top: 6px; }
+.empty { color: var(--muted); margin: 0; }
+
+.combos { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.combo { border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 190px; }
+.combo h3 { font-size: 24px; }
+.combo p { margin: 0; font-size: 15px; }
+.combo .big { font-family: var(--font-display); font-size: 32px; margin-top: auto; }
+.combo button { border: 2px solid currentColor; background: transparent; border-radius: 10px; padding: 9px 14px; font-weight: 700; }
+.k1 { background: var(--gold); color: var(--gold-fg); }
+.k2 { background: var(--ember); color: var(--ember-fg); }
+.k3 { background: var(--fg); color: var(--bg); }
+
+.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.steps li { counter-increment: s; border-top: 3px solid var(--ember); padding-top: 12px; }
+.steps li::before { content: counter(s); display: block; font-family: var(--font-display); font-size: 30px; color: var(--ember); }
+.steps b { display: block; }
+.steps span { color: var(--muted); font-size: 15px; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.cols > * { min-width: 0; }
+.zones, .hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.zones td, .hours td { padding: 9px 0; border-bottom: 1px dashed var(--line); }
+.zones td:last-child, .hours td:last-child { text-align: right; font-weight: 700; }
+.zones tr:last-child td, .hours tr:last-child td { border-bottom: 0; }
+.pay { display: flex; flex-wrap: wrap; gap: 8px; }
+.pay span { border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 14px; font-weight: 700; background: var(--bg); }
+
+.reviews { border: 2px dashed var(--line); border-radius: 16px; padding: 22px; color: var(--muted); }
+.reviews b { color: var(--fg); }
+
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; }
+summary { font-weight: 700; cursor: pointer; }
+details p { margin: 10px 0 0; color: var(--muted); }
+.card p { margin: 0 0 8px; }
+.phone { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.02em; margin: 10px 0 16px !important; }
+
+footer { padding-block: 26px 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 20px; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 5; }
+.bar[hidden] { display: none; }
+.bar b { font-variant-numeric: tabular-nums; }
+.bar a { background: var(--gold); color: var(--gold-fg); text-decoration: none; font-weight: 700; padding: 10px 18px; border-radius: 10px; }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; padding-block: 12px 24px; }
+  .art { order: -1; }
+  .art svg { max-width: 190px; }
+  .builder, .cols { grid-template-columns: 1fr; }
+  nav.links { display: none; }
+}
+</style>
+
+<div class="notice">Site de exemplo, pizzaria e dados fictícios</div>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#inicio">
+      <svg class="flame" viewBox="0 0 22 30" aria-hidden="true"><path d="M11 0 C13 8 21 11 21 20 A10 10 0 0 1 1 20 C1 14 5 12 6 7 C8 9 9 10 9 12 C11 9 11 5 11 0Z" fill="#d9480f"/><path d="M11 14 C12 18 16 19 16 23 A5 5 0 0 1 6 23 C6 20 9 19 11 14Z" fill="#f2b134"/></svg>
+      Brasa Viva
+    </a>
+    <nav class="links" aria-label="Seções">
+      <a href="#monte">Monte sua pizza</a>
+      <a href="#combos">Combos</a>
+      <a href="#entrega">Entrega</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <a class="btn btn-ember" href="#monte">Fazer pedido</a>
+  </header>
+
+  <main id="inicio">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Pizzaria artesanal e delivery</p>
+        <h1>Feita na <em>brasa</em>, entregue quente</h1>
+        <p class="lead">Escolha o tamanho, até dois sabores e a borda. O pedido fica pronto aqui e vai direto para o WhatsApp da pizzaria.</p>
+        <div class="cta">
+          <a class="btn btn-ember" href="#monte">Montar minha pizza</a>
+          <a class="btn btn-ghost" href="#combos">Ver combos</a>
+        </div>
+        <ul class="facts">
+          <li><span>40 min</span>tempo médio</li>
+          <li><span>14</span>sabores</li>
+          <li><span>3</span>tamanhos</li>
+        </ul>
+      </div>
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="190" cy="190" r="178" fill="#d9480f" opacity="0.18"/>
+          <circle cx="190" cy="190" r="150" fill="#b9722f"/>
+          <circle cx="190" cy="190" r="134" fill="#d9480f"/>
+          <circle cx="190" cy="190" r="126" fill="#f2b134"/>
+          <g fill="#b13a0c"><circle cx="146" cy="150" r="22"/><circle cx="226" cy="140" r="22"/><circle cx="252" cy="214" r="22"/><circle cx="182" cy="256" r="22"/><circle cx="126" cy="222" r="22"/><circle cx="192" cy="196" r="20"/></g>
+          <g fill="#2f7d4f"><path d="M104 176 q16 -20 32 -4 q-14 18 -32 4z"/><path d="M262 160 q20 -12 30 8 q-20 12 -30 -8z"/><path d="M162 98 q18 -14 30 4 q-18 14 -30 -4z"/><path d="M212 278 q18 -12 30 6 q-18 12 -30 -6z"/></g>
+          <path d="M190 64 L190 316 M82 128 L298 252 M82 252 L298 128" stroke="#231a15" stroke-width="3" opacity="0.4" fill="none"/>
+        </svg>
+      </div>
+    </div>
+
+    <section id="monte">
+      <div class="sec-head"><h2>Monte sua pizza</h2><p>Escolha tamanho, sabores e borda. O preço segue o sabor mais caro.</p></div>
+      <div class="builder">
+        <div class="card">
+          <div class="group"><b>1. Tamanho</b><div class="opts" id="o-size"></div></div>
+          <div class="group"><b>2. Sabores (até 2)</b><div class="opts" id="o-flav"></div><p class="fine" id="flav-hint">Escolha 1 sabor, ou 2 para meio a meio.</p></div>
+          <div class="group"><b>3. Borda</b><div class="opts" id="o-edge"></div></div>
+          <div class="preview">
+            <svg id="pv" viewBox="0 0 96 96" aria-hidden="true"></svg>
+            <div><div class="pt" id="pv-t">Escolha os sabores</div><div class="pd" id="pv-d"></div></div>
+          </div>
+          <button type="button" class="btn btn-ember btn-full" id="add">Adicionar ao pedido</button>
+        </div>
+        <div class="card" id="pedido">
+          <h3>Seu pedido</h3>
+          <div id="lines"></div>
+          <div class="totals" id="totals" hidden>
+            <div><span>Subtotal</span><span id="t-sub"></span></div>
+            <div><span>Entrega</span><span id="t-fee"></span></div>
+            <div class="grand"><span>Total</span><span id="t-total"></span></div>
+          </div>
+          <div style="height:16px"></div>
+          <div class="field"><label for="f-nome">Seu nome</label><input id="f-nome" type="text" autocomplete="name" placeholder="Maria Silva"></div>
+          <div class="field"><label for="f-bairro">Bairro</label><select id="f-bairro"></select></div>
+          <div class="field"><label for="f-end">Rua e número</label><input id="f-end" type="text" autocomplete="street-address" placeholder="Rua das Flores, 123"></div>
+          <div class="field"><label for="f-pag">Pagamento</label><select id="f-pag"><option>Pix</option><option>Cartão na entrega</option><option>Dinheiro</option></select></div>
+          <div class="field"><label for="f-obs">Observações</label><textarea id="f-obs" placeholder="Ex.: sem cebola, cortar em 12 fatias"></textarea></div>
+          <a class="btn btn-wa btn-full" id="send" href="#" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido pelo WhatsApp</a>
+          <p class="fine">O pedido só é confirmado quando a pizzaria responder no WhatsApp.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="combos">
+      <div class="sec-head"><h2>Combos</h2><p>Valores de exemplo. Cada pizzaria coloca os seus.</p></div>
+      <div class="combos" id="combos-list"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Como pedir</h2></div>
+      <ol class="steps">
+        <li><b>Monte</b><span>Tamanho, sabores e borda.</span></li>
+        <li><b>Envie</b><span>O resumo vai pronto para o WhatsApp.</span></li>
+        <li><b>Confirme</b><span>A equipe responde com o prazo.</span></li>
+        <li><b>Receba</b><span>Em casa ou retire no balcão.</span></li>
+      </ol>
+    </section>
+
+    <section id="entrega">
+      <div class="sec-head"><h2>Entrega e pagamento</h2></div>
+      <div class="cols">
+        <div class="card"><h3>Taxa por bairro</h3><table class="zones" id="zones"></table><p class="fine">Pedido mínimo para entrega: R$ 35,00.</p></div>
+        <div class="card"><h3>Pagamento</h3><div class="pay"><span>Pix</span><span>Crédito</span><span>Débito</span><span>Vale-refeição</span><span>Dinheiro</span></div><p class="fine">Se for pagar em dinheiro, avise o valor para levarmos o troco.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Avaliações</h2></div>
+      <div class="reviews"><b>Avaliações reais do Google.</b> Aqui entram a nota média, o total de avaliações e os melhores comentários da pizzaria, com autorização do dono.</div>
+    </section>
+
+    <section id="duvidas">
+      <div class="sec-head"><h2>Dúvidas frequentes</h2></div>
+      <details><summary>Quanto tempo demora a entrega?</summary><p>Em média 40 minutos, podendo chegar a 60 nos horários de pico.</p></details>
+      <details><summary>Como funciona o meio a meio?</summary><p>Escolha dois sabores no montador. O valor da pizza segue o sabor mais caro dos dois.</p></details>
+      <details><summary>Posso retirar no balcão?</summary><p>Pode. Escolha "Retirada no balcão" no bairro e não paga taxa de entrega.</p></details>
+      <details><summary>Dá pra alterar o pedido depois de enviar?</summary><p>Sim, enquanto a pizza não tiver ido ao forno. Avise logo pelo WhatsApp.</p></details>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Horário e contato</h2></div>
+      <div class="cols">
+        <div class="card"><h3>Horário</h3>
+          <table class="hours">
+            <tr><td>Quarta a sexta</td><td>18h às 23h30</td></tr>
+            <tr><td>Sábado e domingo</td><td>17h às 00h</td></tr>
+            <tr><td>Segunda e terça</td><td>Fechado</td></tr>
+          </table>
+        </div>
+        <div class="card"><h3>Endereço e contato</h3>
+          <p>Av. do Forno, 321, Centro<br>Sua Cidade, CE</p>
+          <p class="phone">(85) 90000-0000</p>
+          <a class="btn btn-wa" href="https://wa.me/5585900000000" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© Brasa Viva Pizzaria. Modelo de site criado como exemplo, com pizzaria fictícia.</footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <span><b id="bar-n">0</b> item(ns) · <b id="bar-t">R$ 0,00</b></span>
+  <a href="#pedido">Ver pedido</a>
+</div>
+
+<script>
+(function () {
+  var WA = "5585900000000";
+  var SIZES = [
+    { n: "Média", d: "6 fatias", p: [36, 46, 38] },
+    { n: "Grande", d: "8 fatias", p: [48, 60, 50] },
+    { n: "Gigante", d: "12 fatias", p: [66, 82, 68] }
+  ];
+  /* tiers: 0 tradicional, 1 especial, 2 doce */
+  var FLAV = [
+    { n: "Calabresa", t: 0, c: "#b13a0c" }, { n: "Mussarela", t: 0, c: "#f6e3a1" },
+    { n: "Frango com catupiry", t: 0, c: "#e9c27a" }, { n: "Portuguesa", t: 0, c: "#c96a3a" },
+    { n: "Margherita", t: 0, c: "#d94f2b" }, { n: "Bacon com milho", t: 0, c: "#a8431f" },
+    { n: "Quatro queijos", t: 1, c: "#f4d67a" }, { n: "Carne de sol", t: 1, c: "#8c4a2a" },
+    { n: "Camarão", t: 1, c: "#e58a5b" }, { n: "Pepperoni", t: 1, c: "#9c2a14" },
+    { n: "Chocolate com morango", t: 2, c: "#5b3224" }, { n: "Banana com canela", t: 2, c: "#e8c46a" }
+  ];
+  var EDGES = [
+    { n: "Sem borda recheada", x: 0 }, { n: "Catupiry", x: 8 }, { n: "Cheddar", x: 8 }, { n: "Chocolate", x: 9 }
+  ];
+  var ZONES = [
+    { n: "Retirada no balcão", f: 0 }, { n: "Centro", f: 4 }, { n: "Bairro Norte", f: 6 },
+    { n: "Bairro Sul", f: 6 }, { n: "Jardim das Flores", f: 8 }, { n: "Distrito Industrial", f: 10 }
+  ];
+  var COMBOS = [
+    { cls: "k1", t: "Casal", d: "1 pizza grande de 1 sabor tradicional e 1 refrigerante 1 L.", p: 62, name: "Combo Casal", sub: "Grande + refri 1 L" },
+    { cls: "k2", t: "Família", d: "1 pizza gigante, borda recheada de catupiry e refrigerante 2 L.", p: 94, name: "Combo Família", sub: "Gigante + borda + refri 2 L" },
+    { cls: "k3", t: "Doce e salgada", d: "1 média salgada e 1 média doce, para dividir.", p: 69, name: "Combo Doce e Salgada", sub: "2 médias" }
+  ];
+
+  var sel = { size: 1, flav: [0], edge: 0 };
+  var cart = [];
+  function $(id) { return document.getElementById(id); }
+  function brl(v) { return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+
+  function pizzaPrice() {
+    var tiers = sel.flav.map(function (i) { return FLAV[i].t; });
+    var prices = tiers.map(function (t) { return SIZES[sel.size].p[t]; });
+    return Math.max.apply(null, prices) + EDGES[sel.edge].x;
+  }
+
+  function opts(id, list, isSel, onPick, sub) {
+    var el = $(id); el.innerHTML = "";
+    list.forEach(function (o, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt";
+      b.setAttribute("aria-pressed", String(isSel(i)));
+      b.innerHTML = o.n + (sub ? "<small>" + sub(o, i) + "</small>" : "");
+      b.addEventListener("click", function () { onPick(i); });
+      el.appendChild(b);
+    });
+  }
+
+  function renderBuilder() {
+    opts("o-size", SIZES, function (i) { return sel.size === i; }, function (i) { sel.size = i; renderBuilder(); },
+      function (o, i) { return o.d + " · " + brl(SIZES[i].p[0]); });
+    opts("o-flav", FLAV, function (i) { return sel.flav.indexOf(i) >= 0; }, function (i) {
+      var k = sel.flav.indexOf(i);
+      if (k >= 0) { if (sel.flav.length > 1) sel.flav.splice(k, 1); }
+      else { if (sel.flav.length >= 2) sel.flav.shift(); sel.flav.push(i); }
+      renderBuilder();
+    }, function (o) { return o.t === 0 ? "Tradicional" : o.t === 1 ? "Especial" : "Doce"; });
+    opts("o-edge", EDGES, function (i) { return sel.edge === i; }, function (i) { sel.edge = i; renderBuilder(); },
+      function (o) { return o.x ? "+ " + brl(o.x) : "Sem custo"; });
+    $("flav-hint").textContent = sel.flav.length === 2 ? "Meio a meio: " + FLAV[sel.flav[0]].n + " e " + FLAV[sel.flav[1]].n + "." : "Escolha 1 sabor, ou 2 para meio a meio.";
+    renderPreview();
+  }
+
+  function renderPreview() {
+    var svg = $("pv"), a = FLAV[sel.flav[0]].c, b = FLAV[sel.flav[sel.flav.length - 1]].c;
+    var edge = sel.edge ? "#f2b134" : "#c78b4a";
+    var ns = "http://www.w3.org/2000/svg";
+    svg.innerHTML = "";
+    function mk(tag, attrs) { var e = document.createElementNS(ns, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; }
+    mk("circle", { cx: 48, cy: 48, r: 46, fill: edge });
+    mk("circle", { cx: 48, cy: 48, r: 38, fill: "#d9480f" });
+    mk("path", { d: "M48 12 A36 36 0 0 0 48 84 Z", fill: a });
+    mk("path", { d: "M48 12 A36 36 0 0 1 48 84 Z", fill: b });
+    mk("line", { x1: 48, y1: 12, x2: 48, y2: 84, stroke: "#231a15", "stroke-opacity": 0.35, "stroke-width": 1.5 });
+    var names = sel.flav.map(function (i) { return FLAV[i].n; });
+    $("pv-t").textContent = names.join(" + ");
+    $("pv-d").textContent = SIZES[sel.size].n + " · " + SIZES[sel.size].d + " · " + (sel.edge ? "borda " + EDGES[sel.edge].n.toLowerCase() : "sem borda recheada") + " · " + brl(pizzaPrice());
+  }
+
+  function addItem(name, sub, price) {
+    var key = name + "|" + sub;
+    var f = cart.filter(function (c) { return c.key === key; })[0];
+    if (f) f.q += 1; else cart.push({ key: key, name: name, sub: sub, price: price, q: 1 });
+    renderCart();
+  }
+  function change(key, d) {
+    cart.forEach(function (c) { if (c.key === key) c.q += d; });
+    cart = cart.filter(function (c) { return c.q > 0; });
+    renderCart();
+  }
+  function zone() { return ZONES[$("f-bairro").selectedIndex] || ZONES[0]; }
+
+  function renderCart() {
+    var lines = $("lines"); lines.innerHTML = "";
+    var sub = 0, n = 0;
+    if (!cart.length) {
+      var e = document.createElement("p"); e.className = "empty"; e.textContent = "Seu pedido está vazio. Monte uma pizza ao lado ou escolha um combo.";
+      lines.appendChild(e);
+    }
+    cart.forEach(function (c) {
+      sub += c.price * c.q; n += c.q;
+      var row = document.createElement("div"); row.className = "line";
+      var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = c.name;
+      var sm = document.createElement("small"); sm.textContent = c.sub; nm.appendChild(sm);
+      var q = document.createElement("div"); q.className = "qty";
+      var mi = document.createElement("button"); mi.type = "button"; mi.textContent = "−"; mi.setAttribute("aria-label", "Diminuir " + c.name);
+      var nu = document.createElement("span"); nu.textContent = c.q;
+      var pl = document.createElement("button"); pl.type = "button"; pl.textContent = "+"; pl.setAttribute("aria-label", "Aumentar " + c.name);
+      mi.addEventListener("click", function () { change(c.key, -1); });
+      pl.addEventListener("click", function () { change(c.key, 1); });
+      q.appendChild(mi); q.appendChild(nu); q.appendChild(pl);
+      var am = document.createElement("div"); am.className = "amt"; am.textContent = brl(c.price * c.q);
+      row.appendChild(nm); row.appendChild(q); row.appendChild(am); lines.appendChild(row);
+    });
+    var fee = cart.length ? zone().f : 0;
+    $("totals").hidden = !cart.length;
+    $("t-sub").textContent = brl(sub);
+    $("t-fee").textContent = fee === 0 ? "Grátis" : brl(fee);
+    $("t-total").textContent = brl(sub + fee);
+    $("bar").hidden = !cart.length;
+    document.body.classList.toggle("has-cart", cart.length > 0);
+    $("bar-n").textContent = n;
+    $("bar-t").textContent = brl(sub + fee);
+    updateLink(sub, fee);
+  }
+
+  function updateLink(sub, fee) {
+    var a = $("send");
+    if (!cart.length) { a.setAttribute("aria-disabled", "true"); a.href = "#"; return; }
+    var z = zone(), t = "*Novo pedido*\n";
+    var nome = $("f-nome").value.trim();
+    if (nome) t += "Nome: " + nome + "\n";
+    t += "\n";
+    cart.forEach(function (c) { t += c.q + "x " + c.name + " (" + c.sub + ") - " + brl(c.price * c.q) + "\n"; });
+    t += "\nSubtotal: " + brl(sub) + "\nEntrega (" + z.n + "): " + (fee === 0 ? "grátis" : brl(fee)) + "\n*Total: " + brl(sub + fee) + "*\n";
+    if (z.f > 0) { var end = $("f-end").value.trim(); if (end) t += "Endereço: " + end + "\n"; }
+    t += "Pagamento: " + $("f-pag").value + "\n";
+    var obs = $("f-obs").value.trim();
+    if (obs) t += "Obs.: " + obs + "\n";
+    a.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(t);
+    a.removeAttribute("aria-disabled");
+  }
+
+  $("add").addEventListener("click", function () {
+    var names = sel.flav.map(function (i) { return FLAV[i].n; });
+    var name = "Pizza " + SIZES[sel.size].n + (names.length === 2 ? " meio a meio" : "");
+    var sub = names.join(" + ") + (sel.edge ? " · borda " + EDGES[sel.edge].n.toLowerCase() : "");
+    addItem(name, sub, pizzaPrice());
+  });
+
+  var cl = $("combos-list");
+  COMBOS.forEach(function (c) {
+    var d = document.createElement("div"); d.className = "combo " + c.cls;
+    var h = document.createElement("h3"); h.textContent = c.t;
+    var p = document.createElement("p"); p.textContent = c.d;
+    var big = document.createElement("div"); big.className = "big"; big.textContent = brl(c.p);
+    var b = document.createElement("button"); b.type = "button"; b.textContent = "Adicionar combo";
+    b.addEventListener("click", function () { addItem(c.name, c.sub, c.p); });
+    d.appendChild(h); d.appendChild(p); d.appendChild(big); d.appendChild(b); cl.appendChild(d);
+  });
+
+  var fb = $("f-bairro"), zt = $("zones");
+  ZONES.forEach(function (z) {
+    var o = document.createElement("option"); o.textContent = z.n + (z.f ? " (" + brl(z.f) + ")" : " (grátis)"); fb.appendChild(o);
+    var tr = document.createElement("tr");
+    var a = document.createElement("td"); a.textContent = z.n;
+    var b = document.createElement("td"); b.textContent = z.f ? brl(z.f) : "Grátis";
+    tr.appendChild(a); tr.appendChild(b); zt.appendChild(tr);
+  });
+  ["f-nome", "f-bairro", "f-end", "f-pag", "f-obs"].forEach(function (id) {
+    $(id).addEventListener("input", renderCart);
+    $(id).addEventListener("change", renderCart);
+  });
+
+  renderBuilder(); renderCart();
+})();
+</script>
+
+</body></html>
